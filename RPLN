@@ -1,0 +1,88 @@
+//Author : pakhandi
+//
+using namespace std;
+
+#include<bits/stdc++.h>
+
+#define wl(n) while(n--)
+#define fl(i,a,b) for(i=a; i<b; i++)
+#define rev(i,a,b) for(i=a; i>=b; i--)
+#define scan(n) scanf("%d", &n)
+#define scans(s) scanf("%s", s)
+#define scanc(c) scanf("%c", &c)
+#define scanp(f) scanf("%f", &f)
+#define scanll(l) scanf("%lld", &l)
+#define scanllu(u) scanf("%llu", &u)
+#define print(n) printf("%d\n", n)
+#define prints(s) printf("%s\n", s)
+#define printc(c) printf("%c\n", c)
+#define printp(f) printf("%f\n", f)
+#define printll(l) printf("%lld\n", l)
+#define printllu(u) printf("%llu\n", u)
+#define nline printf("\n")
+#define mclr(strn) strn.clear()
+#define ignr cin.ignore()
+#define MOD 1000000007
+#define ll long long int
+#define u64 unsigned long long int
+
+#define PB push_back
+#define SZ size()
+
+int arr[1000006], stree[3000006];
+
+int GetMin(int start, int end, int left, int right, int index)
+{
+	if(left<=start && right>=end)
+		return stree[index];
+	if(left>end || start>right)
+		return INT_MAX;
+	//nline; cout<<start<<" "<<end; 
+	
+	int mid=start+end>>1;
+	return min(GetMin(start,mid,left,right,(2*index)+1),GetMin(mid+1,end,left,right,(2*index)+2));
+}
+
+int SegmentTree(int start, int end, int index)
+{
+	if(start==end)
+	{
+		stree[index]=arr[start];
+		return stree[index];
+	}
+	int mid=start+end>>1;
+	stree[index]=min(SegmentTree(start,mid,(2*index)+1),SegmentTree(mid+1,end,(2*index)+2));
+	return stree[index];
+}
+
+int main()
+{
+	//freopen("C:\\Users\\DELL\\Desktop\\input.txt","r",stdin);
+    //freopen("C:\\Users\\DELL\\Desktop\\output.txt","w",stdout);
+	int i, j, cases;
+	int k=1;
+	scan(cases);
+	wl(cases)
+	{
+		int n, q;
+		int l, r;
+		cout<<"Scenario #"<<k<<":";
+		k++;
+		nline;
+		/*fl(i,0,1000006)
+			arr[i]=stree[i]=0;*/
+		scan(n); scan(q);
+		fl(i,0,n)
+			scan(arr[i]);
+		SegmentTree(0,n-1,0);
+		wl(q)
+		{
+			scan(l); scan(r);
+			l--; r--;
+			print(GetMin(0,n-1,l,r,0));
+		}
+	}
+	return 0;
+}
+
+
